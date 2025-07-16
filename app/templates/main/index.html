@@ -1,0 +1,41 @@
+{% extends "main/base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blocks/scene.css') }}">
+{% endblock %}
+
+{% block title %}
+Info page
+{% endblock %}
+
+{% block description %}
+Welcome to main page of my diverse purpose website😊
+{% endblock %}
+
+{% block keywords %}
+Blessed, Blessed website, GPT, ChatGPT, Gemini, Ai, Temp Storage, Project
+{% endblock %}
+
+{% block content %}
+<div class="scene">
+    <div class="cube">
+        <div class="face front"></div>
+        <div class="face back"></div>
+        <div class="face left"></div>
+        <div class="face right"></div>
+        <div class="face top"></div>
+        <div class="face bottom"></div>
+    </div>
+    <div class="fixed-text">
+        <p>Made by Liexer</p>
+        <br>
+        <br>
+        <a href="https://github.com/Radma123" class="btn">Github</a>
+        <a href="https://x.com/Liexerrr1232" class="btn">Twitter</a>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
