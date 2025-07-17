@@ -10,3 +10,4 @@ uploads
 generated_images
 app.log
 .dev.env
+.venv/
