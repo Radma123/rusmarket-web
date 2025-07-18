@@ -1,0 +1,35 @@
+{% extends "main/base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+{% endblock %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center login-form">
+    <div class="card shadow-lg p-4 rounded-4" style="width: 350px;">
+        <h2 class="text-center mb-3">Вход</h2>
+        <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="mb-3">
+                {{ form.username(class='form-control', placeholder='Логин') }}
+            </div>
+            <div class="mb-3">
+                {{ form.password(class='form-control', placeholder='Пароль') }}
+            </div>
+
+            <div class="form-check d-flex align-items-center gap-2 mb-3">
+                {{ form.remember(class="form-check-input") }}
+                {{ form.remember.label(class="form-check-label") }}
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 btn-hover">Войти</button>
+        </form>
+    </div>
+    <div class="card shadow-lg p-4 rounded-4" style="width: 350px;">
+        <a href="{{ url_for('user.register') }}" class="btn btn-warning w-100 btn-hover">Регистрация</a>
+    </div>
+</div>
+{% endblock %}
