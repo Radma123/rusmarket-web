@@ -257,19 +257,17 @@ header a:hover {
   text-align:center;
 }
 
+/* header profile ___________________*/
+
 .user-header-element{
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   gap: 10px;
   border-radius: 40px;
   background: hsla(277, 59%, 71%, 0.8);
   padding: 1px;
-}
-
-.user_nickname{
-  display: flex;
-  align-items: center;
 }
 
 .user_avatar{
@@ -278,8 +276,19 @@ header a:hover {
   height: 45px;
   position: relative;
   border-radius: 50%;
-  object-fit: cover
+  object-fit: cover;
 }
+
+.user_link{
+  height: 45px;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: inherit;
+  padding: 0;
+}
+
 /* __________________________________footer */
 footer{
   display: flex;
@@ -301,3 +310,5 @@ footer .right{
   align-items: center;
   gap: 10px;
 }
+
+/* универсальные приколы */

@@ -4,6 +4,7 @@ from ..extensions import db, login_manager
 from flask_login import UserMixin
 import os
 from flask import current_app
+from enum import Enum
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -12,7 +13,8 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     
-    id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    
     status = db.Column(db.String(50), nullable=False, default='user')
 
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -35,3 +37,36 @@ class User(db.Model, UserMixin):
     #             message.delete_file()  # Удаление файла из сообщений
     #         # Чат будет удалён каскадно, так что можем обработать файлы сообщений до его удаления
     #         db.session.delete(chat)
+
+
+
+class Condition(Enum):
+    NEW = 'новое'
+    USED = 'б/у'
+
+class Product(db.Model):
+    __tablename__ = 'product'
+
+    id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    serial = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    condition = db.Column(db.Enum(Condition), nullable=False, default=Condition.NEW)
+
+    main_image = db.Column(db.String(250), nullable=True)  # Путь к главному фото
+
+    owner = db.Column(db.UUID, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+
+    date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # Связь с дополнительными изображениями
+    images = db.relationship('ProductImage', backref='product', lazy='dynamic', cascade='all, delete-orphan')
+
+class ProductImage(db.Model):
+    __tablename__ = 'product_image'
+
+    id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+    product_id = db.Column(db.UUID, db.ForeignKey('product.id', ondelete='CASCADE'), nullable=False)
+    image_path = db.Column(db.String(250), nullable=False)  # Путь к дополнительному фото
+
+    date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))

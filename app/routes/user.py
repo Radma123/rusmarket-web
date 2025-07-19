@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, render_template, flash, request, url_for
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 from ..extensions import db, bcrypt
 from ..models.user import User
 from ..forms import RegistrationForm, LoginForm
@@ -45,3 +45,8 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index.index_page'))
+
+@user.route('/user/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    return render_template('user/profile.html')

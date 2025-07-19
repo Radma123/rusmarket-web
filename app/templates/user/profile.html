@@ -1,0 +1,20 @@
+{% extends "main/base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+{% endblock %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+<section class="user_settings card shadow-lg p-4 rounded-5">
+    {% if current_user.avatar %}
+        <img src="{{ url_for('static', filename='uploads/'~ current_user.avatar) }}" alt="user_avatar" class="user_avatar_big">
+    {% else %}
+        <img src="{{ url_for('static', filename='media/default-avatar.png') }}" alt="user_avatar" class="user_avatar_big">
+    {% endif %}
+    <div class="user_info">
+        s
+    </div>
+</section>
+{% endblock %}
