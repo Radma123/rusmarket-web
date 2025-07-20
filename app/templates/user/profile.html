@@ -26,7 +26,15 @@
         <div class="edit_section">
             <div>Смениить</div>
             <div>Смениить</div>
-            <div>Подтвердить </div>
+            {% if not current_user.confirmed %}
+                <form method="POST" action="{{ url_for('user.send_confirmation') }}">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(class="btn btn-primary", id="confirm-btn") }}
+                    <span class="spinner-border spinner-border-sm d-none"></span>
+                </form>
+            {% else %}
+                <div>Подтверждено</div>
+            {% endif %}
             <div>Смениить</div>
         </div>
     </div>

@@ -21,6 +21,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     avatar = db.Column(db.String(250))
     email = db.Column(db.String(50), unique=True, nullable = False)
+    confirmed = db.Column(db.Boolean, default=False, nullable=False)
 
     date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 

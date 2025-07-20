@@ -1,9 +1,10 @@
-from flask import Blueprint, redirect, render_template, flash, request, url_for
-from flask_login import login_user, logout_user, login_required
-from ..extensions import db, bcrypt
+from flask import Blueprint, redirect, render_template, flash, request, url_for, current_app
+from flask_login import login_user, logout_user, login_required, current_user
+from ..extensions import db, bcrypt, mail
 from ..models.user import User
-from ..forms import RegistrationForm, LoginForm
-from ..functions import save_avatar_picture
+from ..forms import RegistrationForm, LoginForm, ConfirmEmailForm
+from ..functions import save_avatar_picture, generate_confirmation_token, verify_confirmation_token
+from flask_mail import Message
 
 user = Blueprint('user', __name__)
 
@@ -36,6 +37,9 @@ def login():
             next_page = request.args.get('next')
 
             flash(f"Добро пожаловать, {user.username}!", "success")
+            if not current_user.confirmed:
+                flash("Пожалуйста, подтвердите ваш email в настройках!", "warning")
+
             return redirect(next_page) if next_page else redirect(url_for('index.index_page'))
         else:
             flash(f"Ошибка!", "danger")
@@ -49,4 +53,46 @@ def logout():
 @user.route('/user/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    return render_template('user/profile.html')
+    if not current_user.confirmed:
+        form = ConfirmEmailForm()
+        return render_template('user/profile.html', form=form)
+    else:
+        return render_template('user/profile.html')
+
+
+@user.route('/send_confirmation', methods=['POST'])
+@login_required
+def send_confirmation():
+    form = ConfirmEmailForm()
+    if form.validate_on_submit() and not current_user.confirmed:
+        token = generate_confirmation_token(current_user.email, salt='email-confirm')
+        confirm_url = url_for('user.confirm_email', token=token, _external=True)
+        html = f"""
+        <p>Привет, {current_user.username}!</p>
+        <p>Подтверди email: <a href="{confirm_url}">{confirm_url}</a></p>
+        <p>Ссылка действительна 1 час.</p>
+        """
+        try:
+            msg = Message(subject='Подтверждение email', recipients=[current_user.email], html=html)
+            # mail.send(msg)
+            flash('Ссылка подтверждения отправлена!', 'success')
+        except Exception as e:
+            flash('Ошибка отправки письма.', 'danger')
+            current_app.logger.error(f'Email sending failed: {e}')
+    return redirect(url_for('user.profile'))
+
+@user.route('/confirm/<token>')
+def confirm_email(token):
+    email = verify_confirmation_token(token, salt='email-confirm')
+    if not email:
+        flash('Ссылка недействительна или истек срок.', 'danger')
+        return redirect(url_for('user.profile'))
+    
+    user = User.query.filter_by(email=email).first()
+    if user.confirmed:
+        flash('Email уже подтверждён.', 'info')
+    else:
+        user.confirmed = True
+        db.session.commit()
+        flash('Email успешно подтверждён!', 'success')
+    return redirect(url_for('user.profile'))

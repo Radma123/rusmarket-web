@@ -1,11 +1,12 @@
 from flask import Flask
-from .extensions import db,migrate, bcrypt, assets, login_manager, Mail
+from .extensions import db,migrate, bcrypt, assets, login_manager, mail
 from .config import Config
 from sqlalchemy import event
 # from .models.user import Chats
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
+from itsdangerous import URLSafeTimedSerializer
 
 from .routes.index import index
 from .routes.user import user
@@ -36,6 +37,7 @@ def create_app():
     login_manager.init_app(app)
     bcrypt.init_app(app)
     assets.init_app(app)
+    mail.init_app(app)
 
     # LOGIN MANAGER
     login_manager.login_view = 'user.login'

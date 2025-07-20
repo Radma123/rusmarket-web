@@ -24,3 +24,6 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('Этот логин уже занят, выберите другой')
+        
+class ConfirmEmailForm(FlaskForm):
+    submit = SubmitField('Подтвердить')

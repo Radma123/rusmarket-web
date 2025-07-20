@@ -8,6 +8,9 @@ from .extensions import db
 from .models.user import User
 from sqlalchemy import desc
 import base64
+from itsdangerous import URLSafeTimedSerializer
+
+
 
 #возвращает ЧИСТЫЙ base64 обрезанный
 def compress_base64(base64_string, max_size=(1024, 1024)):
@@ -77,3 +80,28 @@ def save_picture(picture, img_type, temp=True):
     i.save(picture_path)
     
     return picture_fn
+
+
+def generate_confirmation_token(data, salt='default-salt', max_age=3600):
+    """
+    Генерирует токен для переданных данных.
+    
+    Args:
+        data: Данные для сериализации (например, email).
+        secret_key: Секретный ключ для подписи.
+        salt: Соль для разделения контекстов (по умолчанию 'default-salt').
+        max_age: Время жизни токена в секундах (по умолчанию 1 час).
+    
+    Returns:
+        str: Сериализованный токен.
+    """
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    return serializer.dumps(data, salt=salt)
+
+def verify_confirmation_token(token, salt='default-salt', max_age=3600):
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    try:
+        data = serializer.loads(token, salt=salt, max_age=max_age)
+        return data
+    except:
+        return None

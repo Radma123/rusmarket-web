@@ -14,7 +14,7 @@
         <h2 class="text-center mb-4">Регистрация</h2>
         
         <form method="post" enctype="multipart/form-data">
-            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
 
             <div class="mb-3">
                 {{ form.username.label(class="form-label") }}

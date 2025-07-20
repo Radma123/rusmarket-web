@@ -11,7 +11,7 @@
     <div class="card shadow-lg p-4 rounded-4" style="width: 350px;">
         <h2 class="text-center mb-3">Вход</h2>
         <form method="post">
-            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
 
             <div class="mb-3">
                 {{ form.username(class='form-control', placeholder='Логин') }}
