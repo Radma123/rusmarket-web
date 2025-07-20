@@ -14,7 +14,21 @@
         <img src="{{ url_for('static', filename='media/default-avatar.png') }}" alt="user_avatar" class="user_avatar_big">
     {% endif %}
     <div class="user_info">
-        s
+        <div class="user_info_only">
+            <div class="user_block"><h2>Имя</h2>{{ current_user.username }}</div>
+            <div class="user_block"><h2>Email</h2>{{ current_user.email }}</div>
+            <div class="user_block"><h2>Статус Email</h2>{{ current_user.email }}</div>
+            <div class="user_block"><h2>Телефон</h2>{{ current_user.phone or 'Не указан' }}</div>
+            <div class="user_block"><h2>Организация</h2>{{ current_user.phone or 'Не указан' }}</div>
+            <div class="user_block"><h2>Роль</h2>{{ current_user.status }}</div>
+            <div class="user_block"><h2>Регистрация</h2>{{ current_user.date.strftime('%d.%m.%Y') }}</div>
+        </div>
+        <div class="edit_section">
+            <div>Смениить</div>
+            <div>Смениить</div>
+            <div>Подтвердить </div>
+            <div>Смениить</div>
+        </div>
     </div>
 </section>
 {% endblock %}

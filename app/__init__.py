@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import db,migrate, bcrypt, assets, login_manager
+from .extensions import db,migrate, bcrypt, assets, login_manager, Mail
 from .config import Config
 from sqlalchemy import event
 # from .models.user import Chats

@@ -17,7 +17,7 @@ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 .user_settings{
     display: flex;
     flex-direction: row;
-    height: 30%;
+    height: 70%;
     align-items: center;
     justify-content: flex-start;
     gap: 40px;
@@ -30,7 +30,28 @@ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .user_info{
+    display: flex;
     height: 100%;
+    width: 40%;
     flex-direction: row;
+    gap: 20px;
+}
 
+.user_info_only{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 70%;
+}
+
+.user_block{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.edit_section{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
