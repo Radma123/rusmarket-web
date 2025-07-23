@@ -1,0 +1,20 @@
+{% extends "main/base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
+{% endblock %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block content %}
+{% if current_user.status == 'admin' %}
+<form method="post" class="form-control d-flex flex-row gap-2 card shadow-lg p-4 rounded-4">
+    {{ form.hidden_tag() }}
+    <h3 class="form-left-text">Чьи товары показать?</h3>
+    {{ form.user(class="rounded-4", placeholder="Пользователь", style="width:70%") }}
+    {{ form.submit(class="btn btn-success rounded-4") }}
+</form>
+{% endif %}
+
+{% endblock %}

@@ -1,8 +1,8 @@
 from flask import Blueprint, redirect, render_template, flash, request, url_for, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from ..extensions import db, bcrypt, mail
-from ..models.user import User
-from ..forms import RegistrationForm, LoginForm, ConfirmEmailForm
+from ..models.user import User, Product
+from ..forms import RegistrationForm, LoginForm, ConfirmEmailForm, WhoseProductsForm
 from ..functions import save_avatar_picture, generate_confirmation_token, verify_confirmation_token
 from flask_mail import Message
 
@@ -74,7 +74,7 @@ def send_confirmation():
         """
         try:
             msg = Message(subject='Подтверждение email', recipients=[current_user.email], html=html)
-            # mail.send(msg)
+            mail.send(msg)
             flash('Ссылка подтверждения отправлена!', 'success')
         except Exception as e:
             flash('Ошибка отправки письма.', 'danger')
@@ -96,3 +96,27 @@ def confirm_email(token):
         db.session.commit()
         flash('Email успешно подтверждён!', 'success')
     return redirect(url_for('user.profile'))
+
+@user.route('/user/products', methods=['GET', 'POST'])
+@login_required
+def products():
+    form = WhoseProductsForm()
+    form.user.choices = [user.username for user in User.query.all() if user.id != current_user.id]
+    form.user.choices.insert(0, current_user.username)  # Добавляем текущего пользователя в начало списка
+
+    selected_username = request.args.get('user')
+    if selected_username:
+        selected_user = User.query.filter_by(username=selected_username).first().id
+        # products = Product.query.filter_by(owner_id=selected_user.id).all()
+    selected_user =''
+    return render_template('user/products.html', products=products, form=form, selected_user=selected_user)
+
+    if form.validate_on_submit():
+        selected_user = User.query.filter_by(username=form.user.data).first()
+        if selected_user:
+            # products = User.query.filter_by(owner=selected_user.id).all()
+            return render_template('user/products.html', products=products, form=form, selected_user=selected_user)
+        else:
+            flash('Пользователь не найден.', 'danger')
+            return redirect(url_for('user.products'))
+    return render_template('user/products.html', form=form)

@@ -27,3 +27,7 @@ class RegistrationForm(FlaskForm):
         
 class ConfirmEmailForm(FlaskForm):
     submit = SubmitField('Подтвердить')
+
+class WhoseProductsForm(FlaskForm):
+    user = SelectField('Пользователь', choices=[], validators=[DataRequired()])
+    submit = SubmitField('Показать')

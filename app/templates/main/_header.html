@@ -17,12 +17,14 @@
                         {% endif %}
                         <span class="h3 user_text"><i class="bi bi-gear"></i>{{ current_user.username }}</span>
                   </a>
-                  <a href="{{ url_for('user.logout') }}"><i class="bi bi-box-arrow-right"></i></a>
+                  <a class="user_link" href="{{ url_for('user.logout') }}"><i class="bi bi-box-arrow-right"></i></a>
             </div>
-      {% else %}
+                  {% if current_user.status in ('shop','admin') %}
+                        <a class="h3 user-header-element" href="{{ url_for('user.products')}}">Мои товары</a>
+                  {% endif %}
+            {% else %}
             <a href="{{ url_for('user.login') }}" class="login-btn h2"><i class="h2 bi bi-box-arrow-in-right"></i>&nbspВойти</a>
-      {% endif %}
-            <!-- <a href="{{ url_for('index.index_page') }}" class="login-btn h2"><i class="h2 bi bi-box-arrow-in-right"></i>&nbspВойти</a> -->
+            {% endif %}
       </nav>
 </section>
 <section class="right">
